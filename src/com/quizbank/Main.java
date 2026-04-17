@@ -6,8 +6,8 @@ import java.util.*;
 public class Main {
     private static final Scanner scanner = new Scanner(System.in);
 
-    //Временное хранилище вопросов
-    private static final List<Question> questionBank = new ArrayList<>();
+    //используем интерфейс QuestionStorage
+    private static final QuestionStorage storage = new InMemoryQuestionStorage();
 
     public static void main(String[] args) {
 
@@ -15,7 +15,7 @@ public class Main {
 
         System.out.println("=== QUIZ QUESTION BANK ===");
         System.out.println("Welcome! You have "
-                + questionBank.size() + " sample questions.");
+                + storage.size() + " sample questions.");
 
         while (true) {
             printMenu();
@@ -54,21 +54,21 @@ public class Main {
     }
 
     private static void addSampleQuestions() {
-        questionBank.add(new Question(
+        storage.add(new Question(
                 "What is 2 + 2?",
                 Arrays.asList("3", "4", "5"),
                 1,
                 Topic.MATH
         ));
 
-        questionBank.add(new Question(
+        storage.add(new Question(
                 "What is the capital of France?",
                 Arrays.asList("London", "Berlin", "Paris", "Madrid"),
                 2,
                 Topic.GENERAL
         ));
 
-        questionBank.add(new Question(
+        storage.add(new Question(
                 "Which keyword is used to define a class in Java?",
                 Arrays.asList("def", "class", "struct", "type"),
                 1,
@@ -76,7 +76,7 @@ public class Main {
         ));
     }
 
-    //Adds a new question from user input.
+    // Adds a new question from user input.
     private static void addQuestion() {
         System.out.println("\n--- ADD NEW QUESTION ---");
 
@@ -105,34 +105,40 @@ public class Main {
 
         // 5. Create and add
         Question newQuestion = new Question(text, options, correctIndex, topic);
-        questionBank.add(newQuestion);
+        storage.add(newQuestion);
 
         System.out.println("Question added successfully!");
     }
 
-    //Displays all questions in the bank.
-
+    // Displays all questions in the bank.
     private static void listAllQuestions() {
-        System.out.println("\n--- ALL QUESTIONS (" + questionBank.size() + ") ---");
+        List<Question> all = storage.getAll();
 
-        if (questionBank.isEmpty()) {
+        System.out.println("\n--- ALL QUESTIONS (" + all.size() + ") ---");
+
+        if (all.isEmpty()) {
             System.out.println("The question bank is empty.");
             return;
         }
 
-        for (int i = 0; i < questionBank.size(); i++) {
-            Question q = questionBank.get(i);
+        for (int i = 0; i < all.size(); i++) {
+            Question q = all.get(i);
             System.out.println((i + 1) + ". " + q.getText() + " [" + q.getTopic().getDisplayName() + "]");
         }
     }
 
-    //Deletes a question by its number in the list.
-
+    // Deletes a question by its number in the list.
     private static void deleteQuestion() {
-        listAllQuestions();
+        List<Question> all = storage.getAll();
 
-        if (questionBank.isEmpty()) {
+        if (all.isEmpty()) {
+            System.out.println("\nThe question bank is empty. Nothing to delete.");
             return;
+        }
+
+        System.out.println("\n--- DELETE QUESTION ---");
+        for (int i = 0; i < all.size(); i++) {
+            System.out.println((i + 1) + ". " + all.get(i).getText());
         }
 
         System.out.print("\nEnter the number of the question to delete (or 0 to cancel): ");
@@ -143,24 +149,21 @@ public class Main {
             return;
         }
 
-        if (number >= 1 && number <= questionBank.size()) {
-            Question removed = questionBank.remove(number - 1);
-            System.out.println("Deleted: " + removed.getText());
-        } else {
-            System.out.println("Invalid question number.");
-        }
+        // storage.delete() expects 0-based index
+        storage.delete(number - 1);
     }
 
-    //Starts a quiz with all questions in random order.
-
+    // Starts a quiz with all questions in random order.
     private static void takeQuiz() {
-        if (questionBank.isEmpty()) {
+        List<Question> all = storage.getAll();
+
+        if (all.isEmpty()) {
             System.out.println("\nNo questions available. Add some questions first!");
             return;
         }
 
         // Create a shuffled copy of the questions
-        List<Question> quizQuestions = new ArrayList<>(questionBank);
+        List<Question> quizQuestions = new ArrayList<>(all);
         Collections.shuffle(quizQuestions);
 
         System.out.println("\n=== QUIZ STARTED ===");
