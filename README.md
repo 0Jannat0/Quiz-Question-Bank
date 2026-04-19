@@ -70,6 +70,7 @@ Topic: General Knowledge
 
 ## Presentation
 All presentation materials (slides, demo video) are available here:  
+https://drive.google.com/drive/folders/1rprorrXq4DSgHISHGwLWcLzlnOGWDzVO
 
 ## Data Files
 - `questions_db.txt` – plain text storage format (text|options|correctIndex|topic)
