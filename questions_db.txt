@@ -1,0 +1,8 @@
+What is 2 + 2?|3,4,5|1|Math
+What is the capital of France?|London,Berlin,Paris,Madrid|2|General Knowledge
+Which keyword is used to define a class in Java?|def,class,struct,type|1|Java Programming
+What is the root of 64?|2,4,6,8|3|Math
+What is the capital of Kyrgyzstan?|Osh, Bishkek, Karakol, Talas|1|General Knowledge
+What is 2 + 2?|3,4,5|1|Math
+What is the capital of France?|London,Berlin,Paris,Madrid|2|General Knowledge
+Which keyword is used to define a class in Java?|def,class,struct,type|1|Java Programming

@@ -13,12 +13,13 @@ public interface QuestionStorage {
     //Deletes a question by its index.
     void delete(int index);
 
+    void update(int index, Question newQuestion);
+
     //Returns ALL questions in the storage.
     List<Question> getAll();
 
     //Returns questions filtered by topic.
     List<Question> getByTopic(Topic topic);
 
-    //Returns the number of questions in the storage.
     int size();
 }
